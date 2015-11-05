@@ -1,0 +1,51 @@
+program baitap
+	integer N, i
+	real x(1, 200), y(1, 200), sum, mx, my, Dx, Dy, do_lech_phuong_tb_dx, do_lech_phuong_tb_dy, r, a, b
+	print*, 'Nhap N: '
+	read*, N
+	do 1 i = 1, N
+		print*, 'Nhap X(', i, ')'
+		read*, x(i)
+	1 continue
+	do 2 i = 1, N
+		print*, 'Nhap Y(', i, ')'
+		read*, y(i)
+	2 continue
+	sum = 0
+	do 3 i = 1, N
+		sum = sum + x(i)
+	3 continue
+	mx = sum / N
+	sum = 0
+	do 4 i = 1, N
+		sum = sum + y(i)
+	4 continue
+	my = sum / N
+	sum = 0
+	do 5 i = 1, N
+		sum = sum + x(i) * x(i)
+	5 continue
+	Dx = sum / (N - 1)
+	sum = 0
+	do 6 i = 1, N
+		sum = sum + y(i) * y(i)
+	6 continue
+	Dy = sum / (N - 1)
+	do_lech_phuong_tb_dx = sqrt(Dx)
+	do_lech_phuong_tb_dy = sqrt(Dy)
+	sum = 0
+	do 7 i = 1, N
+		sum = sum + x(i) * y(i)
+	7 continue
+	r = (sum / (N - 1) - mx * my) / (do_lech_phuong_tb_dx * do_lech_phuong_tb_dy)
+	a = do_lech_phuong_tb_dy * r / do_lech_phuong_tb_dx
+	b = my - a * mx
+	print*, 'Trung binh mx = ', mx
+	print*, 'Trung binh my = ', my
+	print*, 'Phuong sai Dx = ', Dx
+	print*, 'Phuong sai Dy = ', Dy
+	print*, 'Do lech phuong trung binh dx = ', do_lech_phuong_tb_dx
+	print*, 'Do lech phuong trung binh dy = ', do_lech_phuong_tb_dy
+	print*, 'He so tuong quan r = ', r
+	print*, 'Phuong trinh hoi quy la: y = ', a, '* x + ', b
+end
