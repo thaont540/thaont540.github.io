@@ -335,83 +335,396 @@
         </script>
     </body>
 <xmp id="markdown" style="display: none;">
-# Markdown text goes in here
+## Reflection là gì?
 
-## Chapter 1
+Ngắn gọn nhất thì có thể nói Reflection cung cấp khả năng phân tích cấu trúc bên trong một class bao gồm các: method, property, const, comment và thay đổi (modify) chúng.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-et dolore magna aliqua.
+## Nó dùng để làm gì?
 
-## Chapter 2
+Thật ra là mình cũng ít (không) khi nào dùng đến cái này lắm, nhưng qua tìm hiểu thì thấy nó khá là hữu ích, có thể thay đổi cách làm 1 số chuyện của mình.
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+Ví dụ đọc code của ai đó mà không biết cái biến này là gì, 1 object hay 1 số, 1 string thì có thể dùng hàm cơ bản của PHP là `get_class()` và `get_class_method()`.
 
-## Emphasis
+Tiếp theo là chúng ta có thể sử dụng Reflection để tạo tài liệu bằng cách get comment của 1 class nào đó, rồi kiểm tra từng method, constructor và class đó để xác định những gì diễn ra đối với đầu vào và đầu ra.
 
-**This is bold text**
+## Các hàm Reflection thông dụng
 
-__This is bold text__
+Ví dụ ta dùng `get_class()` và `get_class_methods()`:
 
-*This is italic text*
+```PHP
+var_dump(get_class($user));
+//App\Models\User
 
-_This is italic text_
+var_dump(get_class_method($user));
+//Method A
+//Method B
+//Method C
+//Something else
+```
+`get_class()` trả về 1 string tên của class và `get_class_method()` trả về 1 mảng tên các method trong object đó.
 
-~~Strikethrough~~
+Một hàm khác cũng hay dùng đấy là `method_exists()`:
 
-## Footnotes
+```PHP
+class User {
 
-Footnote 1 link[^first].
+    protected function getUsername()
+    {
+        //....
+    }
 
-Footnote 2 link[^second].
+    public function __get($param)
+    {
+        $method = 'get' . ucfirst($param);
 
-Inline footnote^[Text of inline footnote] definition.
-
-## Blockquotes
-
-> Blockquotes can also be nested...
-
-```xml
-<plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-jar-plugin</artifactId>
-<version>2.4</version>
-....
-</plugin>
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        }
+    }
+}
 ```
 
-## Code
+Nhìn cũng đủ hiểu chức năng của cái hàm này là gì rồi đúng không?
 
-Inline `code`
+## PHP Reflection Class
 
-Indented code
+Để dễ hiểu hơn ta có 1 số class như sau:
 
-// Some comments
-line 1 of code
-line 2 of code
-line 3 of code
+```PHP
+<?php
 
+namespace App\Models\Facebook;
 
-Block code "fences"
+class UUID
+{
+
+}
+
+abstract class Entity
+{
+
+}
+
+interface Friendable
+{
+
+}
+
+interface Likeable
+{
+
+}
+
+interface Postable
+{
+
+}
+
+class User extends Entity implements Friendable, Likeable, Postable
+{
+    public function __construct($name, UUID $uuid)
+    {
+
+    }
+
+    public function like(Likebable $entity)
+    {
+
+    }
+
+    public function friend(User $user)
+    {
+
+    }
+
+    public function post(Post $post)
+    {
+
+    }
+}
+ 
+$reflection = new \ReflectionClass(new User('Sơn Tùng Ôm Ti Vi', new UUID(1234)));
 
 ```
-Sample text here...
+
+### Get class name
+Get full name
+
+```PHP
+echo $reflection->getName();
+// App\Models\Facebook\User
 ```
 
-Syntax highlighting
+Get name
 
-``` js
-var foo = function (bar) {
-return bar++;
-};
+```PHP
+echo $reflection->getShortName();
+// User
+```
 
----
+Get namespace
+```PHP
+echo $reflection->getNamespaceName();
+// App\Models\Facebook
+```
 
-[^first]: Footnote **can have markup**  and multiple paragraphs.
+### Get parent class
+Chúng ta có 1 instance ReflectionClass mới của class cha của User
 
-[^second]: Footnote text.
+```PHP
+$parent = $reflection->getParentClass();
+echo $parent->getName();
+// App\Models\Facebook\Entity
+```
+
+### Get interfaces
+
+```PHP
+$interfaces = $reflection->getInterfaceNames();
+ 
+echo "<pre>"; //Đây là cách hay dùng khi mà chưa biết đến Laravel :v
+var_dump($interfaces);
+/*
+array(3) {
+  [0]=>
+  string(28) "App\Models\Facebook\Friendable"
+  [1]=>
+  string(26) "App\Models\Facebook\Likeable"
+  [2]=>
+  string(26) "App\Models\Facebook\Postable"
+}
+*/
+```
+Hoặc get 1 mảng các ReflectionClass instances của các interfaces
+
+```PHP
+$interfaces = $reflection->getInterfaces();
+ 
+echo "<pre>";
+var_dump($interfaces);
+ 
+/*
+array(3) {
+  ["App\Models\Facebook\Friendable"]=>
+  &object(ReflectionClass)#3 (1) {
+    ["name"]=>
+    string(28) "App\Models\Facebook\Friendable"
+  }
+  ["App\Models\Facebook\Likeable"]=>
+  &object(ReflectionClass)#4 (1) {
+    ["name"]=>
+    string(26) "App\Models\Facebook\Likeable"
+  }
+  ["App\Models\Facebook\Postable"]=>
+  &object(ReflectionClass)#5 (1) {
+    ["name"]=>
+    string(26) "App\Models\Facebook\Postable"
+  }
+}
+*/
+```
+
+### Get class methods
+
+```PHP
+$methods = $reflection->getMethods();
+var_dump($methods);
+ 
+echo "<pre>";
+var_dump($methods);
+/*
+array(3) {
+  [0]=>
+  &object(ReflectionMethod)#2 (2) {
+    ["name"]=>
+    string(4) "like"
+    ["class"]=>
+    string(22) "App\Models\Facebook\User"
+  }
+  [1]=>
+  &object(ReflectionMethod)#3 (2) {
+    ["name"]=>
+    string(6) "friend"
+    ["class"]=>
+    string(22) "App\Models\Facebook\User"
+  }
+  [2]=>
+  &object(ReflectionMethod)#4 (2) {
+    ["name"]=>
+    string(4) "post"
+    ["class"]=>
+    string(22) "App\Models\Facebook\User"
+  }
+}
+*/
+```
+
+### Get constructor
+
+```PHP
+$constructor = $reflection->getConstructor();
+ 
+echo "<pre>";
+var_dump($constructor);
+/*
+object(ReflectionMethod)#2 (2) {
+  ["name"]=>
+  string(11) "__construct"
+  ["class"]=>
+  string(22) "App\Models\Facebook\User"
+}
+*/
+```
+Chúng ta có thể xem đầu vào của hàm khởi tạo này
+
+```PHP
+echo "<pre>";
+var_dump($constructor->getParameters());
+/*
+array(2) {
+  [0]=>
+  &object(ReflectionParameter)#3 (1) {
+    ["name"]=>
+    string(4) "name"
+  }
+  [1]=>
+  &object(ReflectionParameter)#4 (1) {
+    ["name"]=>
+    string(4) "uuid"
+  }
+}
+*/
+```
+
+Cái `$constructor->getParameters()` này cũng là 1 mảng các instance `ReflectionParameter`, chúng ta lại có thể dùng được:
+
+```PHP
+$parameters = $constructor->getParameters();
+ 
+echo "<pre>";
+var_dump($parameters[1]->getClass());
+/*
+object(ReflectionClass)#5 (1) {
+  ["name"]=>
+  string(22) "App\Models\Facebook\UUID"
+}
+*/
+```
+
+### getDocComment
+
+Như đã nói ở trên, chúng ta có thể get comment của 1 class. Ví dụ ta có 1 class như này:
+
+```PHP
+<?php
+
+/** 
+* A test class
+*
+* @param  foo bar
+* @return baz
+*/
+
+class TestClass
+{
+
+}
+
+$reflection = new ReflectionClass('TestClass');
+var_dump($reflection->getDocComment())
+
+```
+
+và kết quả là như thế này
+
+```
+string(55) "/** 
+* A test class
+*
+* @param  foo bar
+* @return baz
+*/"
+```
+
+## Làm gì với Refection
+
+Giả sử ta có các class sau
+
+```PHP
+<?php
+
+class Author 
+{
+    private $name;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+}
+
+class Book 
+{
+    private $author;
+    private $name;
+
+    public function __construct($name, $author)
+    {
+        $this->name = $name;
+        $this->author = $author;
+    }
+
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+}
+```
+
+Khởi tạo 1 book thì có thể `$author` là 1 string hoặc là 1 instance của `Author`
+
+```PHP
+<?php
+$book1 = new Book('Tắt đèn', 'Ngô Tất Tố');
+var_dump($book1->getAuthor());
+//Ngô Tất Tố
+
+$author = new Author('Nam Cao');
+$book2 = new Book('Làng Vũ Đại ngày ấy', $author);
+var_dump($book2->getAuthor());
+/*
+&object(Author)#1 (1) {
+    ["name"]=>
+    string(4) "Nam Cao"
+}
+*/
+```
+
+Sửa class Book 
+
+```PHP
+    public function __construct($name, $author)
+    {
+        $this->name = $name;
+        $this->author = $author;
+        var_dump($author->getName());
+    }
+```
+
+Nhìn qua ta thấy ngay là chạy `$book1` sẽ bị lỗi và `$book2` cho ta kết quả là "Nam Cao". Vào thời điểm runtime $book2, PHP sẽ kiểm tra $author truyền vào cho constructor và tự hiểu $author là 1 instance của class Author và có 1 method là getName(). Đó chính là Refection mà PHP đã dùng để biết được kiểu của biến truyền vào.
+
+Mấy ngôn ngữ mà làm được việc trên gọi là `dynamically-typed language`, là ngôn ngữ có thể tự hiểu được object tại thời điểm runtime, không cần tại compile time. PHP, Ruby, Python là `dynamically-typed language`. Ngược lại C hay Java là `statically-typed language`.
+
+## Kết luận
+
+- Cảm ơn nhà tài trợ [Google search](https://www.google.com.vn/?gfe_rd=cr&ei=rCRhWOHeMpSH1ASSgIHADA#q=what+is+php+reflection) đã đồng hành cùng bài viết này.
+- Link tới [Viblo](https://viblo.asia/thaont/posts/mrDGMMOMGzL)
+
 </xmp>
 
 </html>
