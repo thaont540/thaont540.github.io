@@ -1,0 +1,45 @@
+body.light .messageBadge .chatTimeLineTo {
+    background-color: #66A300 !important;
+}
+body.light .chatTimeLineReply__iconBox {
+    background-color: #66A300 !important;
+}
+body.light .roomDescription__header {
+    background-color: #E4F6F3 !important;
+}
+body.light .roomTask__header {
+    background-color: #E4F6F3 !important;
+}
+body.light a {
+    color: #2e6ee8 !important;
+}
+body.light ._message.messageHasBorder.gngoBe {
+    background: linear-gradient(to left, green 4px, rgb(228, 246, 243) 4px) !important;
+}
+body.light ._speakerName {
+    color: #0084B2 !important;
+}
+body.light .chatTimeLineReply__label {
+    display: none !important;
+}
+body.light ul li.DSSjv {
+    background-color: #0000002b !important;
+    border-color: black !important;
+}
+body.light .messageBadge .chatTimeLineTo__icon {
+    fill: #ffffff !important;
+}
+body.light .messageBadge .chatTimeLineReply__replyIcon {
+    fill: #ffffff !important;
+}body.light .messageBadge .chatTimeLineReply__icon {
+     fill: #ffffff !important;
+ }
+body.light .messageBadge__toAllBadge {
+    background-color: #66A300 !important;
+}
+body.light .messageBadge__toAllBadgeIcon {
+    fill: #ffffff !important;
+}
+body #_myStatusBox a {
+    color: #ffffff !important;
+}
