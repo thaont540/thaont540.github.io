@@ -13,32 +13,26 @@ body.light .roomTask__header {
 body.light a {
     color: #2e6ee8 !important;
 }
-body.light ._message.messageHasBorder.gngoBe {
+body.light ._message.eBsbzX {
     background: linear-gradient(to left, green 4px, rgb(228, 246, 243) 4px) !important;
 }
 body.light ._speakerName {
     color: #0084B2 !important;
 }
-body.light .chatTimeLineReply__label {
+body.light ._replyMessage p {
     display: none !important;
 }
 body.light ul li.DSSjv {
     background-color: #0000002b !important;
     border-color: black !important;
 }
-body.light .messageBadge .chatTimeLineTo__icon {
+body.light ._replyMessage div {
     fill: #ffffff !important;
-}
-body.light .messageBadge .chatTimeLineReply__replyIcon {
-    fill: #ffffff !important;
-}body.light .messageBadge .chatTimeLineReply__icon {
-     fill: #ffffff !important;
- }
-body.light .messageBadge__toAllBadge {
     background-color: #66A300 !important;
 }
-body.light .messageBadge__toAllBadgeIcon {
+body.light ._message div[data-cwtag] div {
     fill: #ffffff !important;
+    background-color: #66A300 !important;
 }
 body #_myStatusBox a {
     color: #ffffff !important;
