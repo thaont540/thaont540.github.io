@@ -34,6 +34,10 @@ body.light ._message div[data-cwtag] div {
     fill: #ffffff !important;
     background-color: #66A300 !important;
 }
-body #_myStatusBox a {
+body.light #_subRoomDescription div[data-cwtag] .chatTimeLineTo__icon {
+    fill: #ffffff !important;
+    background-color: #66A300 !important;
+}
+body.light #_myStatusBox a {
     color: #ffffff !important;
 }
