@@ -30,9 +30,6 @@
         span {
             color: red;
         }
-        .no-display {
-            display: none !important;
-        }
         .small {
             font-size: 10px;
             line-height: 18px;
@@ -170,6 +167,9 @@
             display: block;
             width: 100%;
         }
+        .calc-formula {
+            white-space: pre;
+        }
     </style>
 </head>
 <body>
@@ -190,18 +190,32 @@
         </div>
     </form>
 </div>
-<div class="show-result no-display">
-<div class="testbox result">
-    <div><h4>Số đạn bắn được cao nhất là: <b class="bullet-number">0</b> viên / s</h4></div>
-    <div><h4>Khi màn hình được set là: <b class="set-hz">0</b> Hz</h4></div>
-    <hr>
-<!--    <div><h4>Ngoài ra còn 1 số lựa chọn sau:</h4></div>-->
-<!--    <div class="other-setting"></div>-->
+
+<div class="show-result">
+    <div class="testbox result">
+        <div><h4>Số đạn bắn được cao nhất là: <b class="bullet-number">0</b> viên / s</h4></div>
+        <div><h4>Khi màn hình được set là: <b class="set-hz">0</b> Hz</h4></div>
+        <hr>
+    <!--    <div><h4>Ngoài ra còn 1 số lựa chọn sau:</h4></div>-->
+    <!--    <div class="other-setting"></div>-->
+    </div>
 </div>
+<div class="testbox">
+    <div class="calc-formula">
+        <p>Số đạn bắn ra trên giây được tính bằng công thức:
+            <b>T = F / ROUNDUP((F x R x (100 - E) / 100) / (1 + A))</b>
+            F: Tần số quét màn hình
+            R: Thời gian tái công kích gốc của vũ khí
+            E: % tái công kích của vũ khí (được enchant thêm)
+            A: số lượt bắn thêm khi sử dụng skill
+            ROUNDUP là làm tròn lên: 2.1 => 3, 2.9 => 3</p>
+    </div>
 </div>
 </body>
 <script>
     $(function () {
+        $('.show-result').hide();
+        $('.calc-formula').hide();
         loadInput();
 
         $('.btn-calc').on('click', function (ev) {
@@ -219,8 +233,9 @@
     });
 
     function showResult(result) {
-        $('.show-result').removeClass('no-display');
-        $('.result .bullet-number').html(result[0].bulletNo);
+        $('.show-result').show();
+        $('.calc-formula').show();
+        $('.result .bullet-number').html(result[0].bulletNo.toFixed(2));
         $('.result .set-hz').html(result[0].hz);
 
         // let otherSettingHtml = '';
