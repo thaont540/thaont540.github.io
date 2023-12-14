@@ -196,8 +196,8 @@
         <div><h4>Số đạn bắn được cao nhất là: <b class="bullet-number">0</b> viên / s</h4></div>
         <div><h4>Khi màn hình được set là: <b class="set-hz">0</b> Hz</h4></div>
         <hr>
-    <!--    <div><h4>Ngoài ra còn 1 số lựa chọn sau:</h4></div>-->
-    <!--    <div class="other-setting"></div>-->
+        <div><h4>Ngoài ra còn 1 số lựa chọn sau:</h4></div>
+        <div class="other-setting"></div>
     </div>
 </div>
 <div class="testbox">
@@ -227,7 +227,7 @@
                 alert('Nhập hết thông tin đi bạn');
                 return;
             }
-            console.log(r, e, hzDefault);
+
             showResult(calc(r, e, hzDefault));
         });
     });
@@ -235,17 +235,17 @@
     function showResult(result) {
         $('.show-result').show();
         $('.calc-formula').show();
-        $('.result .bullet-number').html(result[0].bulletNo.toFixed(2));
+        $('.result .bullet-number').html(result[0].bulletNo);
         $('.result .set-hz').html(result[0].hz);
 
-        // let otherSettingHtml = '';
-        // for (let i = 1; i < 20; i++) {
-        //     if (typeof result[i] !== 'undefined') {
-        //         otherSettingHtml += '<div><p>Set ' + result[i].hz + ' Hz - bắn được ' + result[0].bulletNo + ' viên / giây</p></div>'
-        //     }
-        // }
-        //
-        // $('.other-setting').append(otherSettingHtml);
+        let otherSettingHtml = '';
+        for (let i = 1; i < 30; i++) {
+            if (typeof result[i] !== 'undefined' && result[i].bulletNo >= 19) {
+                otherSettingHtml += '<div><p>Set ' + result[i].hz + ' Hz - bắn được ' + result[i].bulletNo + ' viên / giây</p></div>'
+            }
+        }
+
+        $('.other-setting').empty().append(otherSettingHtml);
     }
 
     function loadInput() {
@@ -292,13 +292,13 @@
         $('.select-ent').append(htmlTimeEnchantOptions);
     }
     function calc(r, e, hzDefault) {
-        hzDefault = hzDefault * 100;
+        // hzDefault = hzDefault;
         let fbs = [];
-        let hzMin = 3000;
+        let hzMin = 30;
         for (let i = hzDefault; i >= hzMin; i--) {
-            let hz = i / 100;
+            let hz = i;
             let bulletNo = hz / Math.ceil((hz * r *(100 - e) / 100) / 3);
-            fbs.push({'bulletNo': bulletNo, 'hz': hz});
+            fbs.push({'bulletNo': bulletNo.toFixed(2), 'hz': hz});
         }
 
         return fbs.sort((a, b) => b.bulletNo - a.bulletNo);
