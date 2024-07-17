@@ -274,6 +274,10 @@
                 'name': 'Jack giáng sinh',
                 'time': 0.40
             },
+            {
+                'name': 'Omega Mount',
+                'time': 2.0
+            },
         ];
 
         let htmlWeaponOptions = '';
@@ -295,9 +299,13 @@
         // hzDefault = hzDefault;
         let fbs = [];
         let hzMin = 30;
+        let x = 1;
+        if (r == 2) {
+            x = 2;
+        }
         for (let i = hzDefault; i >= hzMin; i--) {
             let hz = i;
-            let bulletNo = hz / Math.ceil((hz * r *(100 - e) / 100) / 3);
+            let bulletNo = hz / Math.ceil((hz * r *(100 - e) / 100) / (x + 2));
             fbs.push({'bulletNo': bulletNo.toFixed(2), 'hz': hz});
         }
 
